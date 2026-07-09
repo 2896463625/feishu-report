@@ -1,0 +1,9 @@
+interface:
+  display_name: "Coding transform"
+  short_description: "同步 CODING 工作台任务到飞书日任务表"
+  brand_color: "#2563EB"
+  default_prompt: "Use $coding-transform to sync my CODING workbench tasks into my Feishu Base daily task table."
+
+policy:
+  allow_implicit_invocation: true
+

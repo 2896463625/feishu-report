@@ -1,0 +1,14 @@
+{
+  "baseToken": "your_feishu_base_token",
+  "tableId": "your_base_table_id",
+  "viewId": "your_base_view_id",
+  "credentialPath": "C:\\Users\\you\\.codex\\credentials\\coding.credential.xml",
+  "statePath": "C:\\Users\\you\\.codex\\state\\coding-transform\\sync-state.json",
+  "codingTeamHost": "your-team.coding.net",
+  "codingOpenApi": "https://your-team.coding.net/open-api",
+  "teamTableId": "your_linked_team_table_id",
+  "waterBiRecordId": "linked_team_record_id_for_data_platform",
+  "yuyaoRecordId": "linked_team_record_id_for_yuyao_or_default_project",
+  "ownerOpenId": "feishu_owner_open_id",
+  "ownerDepartment": "后端组"
+}

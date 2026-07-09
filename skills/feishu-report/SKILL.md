@@ -1,10 +1,11 @@
 ---
-name: "feishu report"
+name: feishu-report
 version: 1.0.0
 description: "Use when用户需要生成飞书日报/周报、汇总本周工作、整理下周计划、预览后填写工作汇报。"
 metadata:
   requires:
     bins: ["lark-cli"]
+    skills: ["coding-transform"]
   cliHelp: "lark-cli --help"
 ---
 
@@ -24,7 +25,7 @@ metadata:
    ```
    拿到 `verification_url` 后必须生成二维码并展示。用户授权完成后再继续。
 2. 周报素材必须尽量收集：
-   - CODING 本周任务：优先只读 / DryRun，不写入 Base。
+   - CODING 本周任务：优先调用 `coding-transform` 只读 / DryRun，不写入 Base；如果未安装或未配置，跳过该数据源并告知用户。
    - 用户最近一周本人聊天记录。
    - 用户最近一周被 @、被指派、被询问的聊天内容。
    - 飞书多维表格本周工作任务。

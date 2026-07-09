@@ -2,7 +2,7 @@
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-SKILL_DIR="$SCRIPT_DIR/skills/lark-daily-report"
+SKILL_DIR="$SCRIPT_DIR/skills/feishu-report"
 DATA_FILE="/tmp/lark_report_data_$(date +%Y%m%d_%H%M%S).json"
 REPORT_FILE="/tmp/lark_report_$(date +%Y%m%d_%H%M%S).md"
 
@@ -28,7 +28,7 @@ if [ -n "$CHAT_ID" ]; then
     python3 "$SKILL_DIR/scripts/publish.py" --report "$REPORT_FILE" --mode both --chat-id "$CHAT_ID"
 else
     echo "[3/3] 正在发布报告（文档）..."
-    python3 "$SKILL_DIR/scripts/publish.py" --report "$REPORT_FILE" --mode doc"
+    python3 "$SKILL_DIR/scripts/publish.py" --report "$REPORT_FILE" --mode doc
 fi
 
 echo ""

@@ -1,6 +1,6 @@
 # Feishu Report Skill
 
-飞书周报 / 日报生成 skill。当前安装名为 `feishu report`，仓库路径保留为 `skills/lark-daily-report` 以兼容原目录。
+飞书周报 / 日报生成 skill。安装名为 `feishu-report`，仓库路径为 `skills/feishu-report`。
 
 ## 适用场景
 
@@ -10,7 +10,7 @@
 
 ## 周报数据源
 
-- CODING 本周任务：优先使用 `coding-transform` DryRun，只读采集。
+- CODING 本周任务：优先使用同仓库的 `coding-transform` DryRun，只读采集；未安装或未配置时跳过。
 - 飞书聊天记录：采集用户最近一周本人消息。
 - 飞书被 @ 内容：采集用户最近一周被 @、被指派、被询问的内容。
 - 飞书多维表格：读取本周工作任务、任务描述和必要上下文。
@@ -54,4 +54,3 @@ lark-cli auth login --device-code <device_code>
 - 浏览器填写时只填“本周工作”“下周计划”“学习和沉淀”等对应字段。
 - 禁止点击提交，除非用户明确要求提交。
 - 不输出 token、App Secret、账号密码等敏感信息。
-

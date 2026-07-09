@@ -25,7 +25,7 @@ lark-cli auth login --scope "base:field:read base:record:read search:message im:
 
 周报默认范围为本周一至今天。只读采集，先不写入、不提交：
 
-- CODING 本周任务：优先运行 `coding-transform` 的 DryRun，读取当前待办、可完成项、状态变化，不写 Base。
+- CODING 本周任务：优先运行 `coding-transform` 的 DryRun，读取当前待办、可完成项、状态变化，不写 Base；未安装或未配置时跳过并在素材缺口中说明。
 - 用户本人最近一周聊天记录：`lark-cli im +messages-search --query='' --sender=<user_open_id> --start ... --end ... --page-all --format=json --as=user`。
 - 用户被 @ / 被指示内容：`lark-cli im +messages-search --query='' --is-at-me --start ... --end ... --page-all --format=json --as=user`。
 - 飞书多维表格本周工作任务：解析用户给出的 Base URL，读取字段、视图记录，再按 record_id 回查必要字段。

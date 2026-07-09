@@ -80,13 +80,13 @@ cd larkcli
 
 ```bash
 # Step 1: 采集数据
-python3 skills/lark-daily-report/scripts/collect.py --mode daily > data.json
+python3 skills/feishu-report/scripts/collect.py --mode daily > data.json
 
 # Step 2: 生成报告（自动调用 AI 分析）
-python3 skills/lark-daily-report/scripts/generate.py --data data.json --output report.md
+python3 skills/feishu-report/scripts/generate.py --data data.json --output report.md
 
 # Step 3: 发布到飞书文档
-python3 skills/lark-daily-report/scripts/publish.py --report report.md --mode doc
+python3 skills/feishu-report/scripts/publish.py --report report.md --mode doc
 ```
 
 ## 报告示例
@@ -159,27 +159,19 @@ larkcli/
 ├── .env.example                          # 环境配置模板
 ├── .gitignore
 ├── README.md
-└── skills/lark-daily-report/             # 飞书 CLI Skill（符合官方规范）
-    ├── SKILL.md                          # Skill 定义
-    ├── AGENTS.md                         # Agent 执行指南
-    └── scripts/
-        ├── collect.py                    # 数据采集引擎
-        │   ├── collect_calendar()         # 日历日程采集
-        │   ├── collect_tasks()            # 任务状态采集
-        │   ├── collect_documents()        # 文档编辑记录
-        │   └── collect_messages()         # IM 消息摘要
-        ├── generate.py                   # 报告生成引擎
-        │   ├── _generate_ai_summary()     # AI 智能总结
-        │   ├── _generate_insights()       # 效率洞察分析
-        │   ├── _generate_suggestions()    # 下一步建议
-        │   └── template rendering        # Markdown 模板渲染
-        ├── ai_engine.py                  # LLM AI 引擎
-        │   ├── analyze_work_summary()     # 工作内容总结
-        │   ├── generate_insights()        # 数据洞察生成
-        │   └── suggest_next_steps()       # 行动建议生成
-        └── publish.py                    # 报告发布器
-            ├── publish_to_doc()           # 写入飞书文档
-            └── publish_to_chat()          # 发送到群聊
+└── skills/
+    ├── feishu-report/                    # 飞书日报/周报 Skill
+    │   ├── SKILL.md                      # Skill 定义
+    │   ├── AGENTS.md                     # Agent 执行指南
+    │   └── scripts/
+    │       ├── collect.py                # 数据采集引擎
+    │       ├── generate.py               # 报告生成引擎
+    │       ├── ai_engine.py              # LLM AI 引擎
+    │       └── publish.py                # 报告发布器
+    └── coding-transform/                 # CODING 工作台任务同步 Skill
+        ├── SKILL.md
+        ├── coding-transform.config.example.json
+        └── scripts/sync-coding-transform.ps1
 ```
 
 ## 作为飞书 CLI Skill 使用
@@ -188,16 +180,39 @@ larkcli/
 
 ```bash
 # 方式一：复制到 Trae skills 目录
-cp -r skills/lark-daily-report ~/.trae-cn/skills/
+cp -r skills/feishu-report ~/.trae-cn/skills/
+cp -r skills/coding-transform ~/.trae-cn/skills/
 
 # 方式二：在 Trae IDE 中引用本项目的 skills 目录
 ```
 
 安装后，在任何支持飞书 CLI 的 AI Agent 中说 **"帮我写日报"** 即可触发。
 
+### CODING Transform 配置
+
+如果需要把 CODING 工作台任务纳入周报，先安装并配置 `coding-transform`：
+
+```powershell
+Copy-Item skills/coding-transform/coding-transform.config.example.json skills/coding-transform/coding-transform.config.json
+```
+
+填写 `baseToken`、`tableId`、`viewId`、`codingTeamHost`、负责人 open_id 和关联记录 ID。CODING token 不要写入配置文件，Windows 可用 DPAPI 保存：
+
+```powershell
+$token = Read-Host "Paste CODING token" -AsSecureString
+$cred = New-Object System.Management.Automation.PSCredential("coding", $token)
+$cred | Export-Clixml "$env:USERPROFILE\.codex\credentials\coding.credential.xml"
+```
+
+再把 `credentialPath` 指向该文件。正式写入前先 DryRun：
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File "skills/coding-transform/scripts/sync-coding-transform.ps1" -DryRun
+```
+
 ## Feishu Report Skill 使用说明
 
-飞书周报 / 日报生成 skill。当前安装名为 `feishu report`，仓库路径保留为 `skills/lark-daily-report` 以兼容原目录。
+飞书周报 / 日报生成 skill。当前安装名为 `feishu-report`，仓库路径为 `skills/feishu-report`。CODING 数据源由同仓库的 `coding-transform` 提供。
 
 ### 适用场景
 
@@ -207,7 +222,7 @@ cp -r skills/lark-daily-report ~/.trae-cn/skills/
 
 ### 周报数据源
 
-- CODING 本周任务：优先使用 `coding-transform` DryRun，只读采集。
+- CODING 本周任务：优先使用 `coding-transform` DryRun，只读采集；未安装或未配置时跳过。
 - 飞书聊天记录：采集用户最近一周本人消息。
 - 飞书被 @ 内容：采集用户最近一周被 @、被指派、被询问的内容。
 - 飞书多维表格：读取本周工作任务、任务描述和必要上下文。
