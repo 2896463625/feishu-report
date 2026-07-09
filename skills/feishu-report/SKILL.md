@@ -11,9 +11,11 @@ metadata:
 
 # 飞书智能日报/周报生成器
 
-**CRITICAL — 开始前 MUST 先用 Read 工具读取 [`../lark-shared/SKILL.md`](../lark-shared/SKILL.md)，其中包含认证、权限处理**
-
 > 一句话描述：你什么都不用写，AI 自动帮你汇总一天的工作成果 ✨
+
+## 认证规则
+
+优先使用 `lark-cli` 的用户身份（`--as user`）。生成授权链接时必须一次性带齐下方周报 scope，拿到 `verification_url` 后展示二维码或原始链接；用户授权完成后再继续采集数据。
 
 ## 周报硬性流程
 
@@ -21,7 +23,7 @@ metadata:
 
 1. 先检查用户身份和 scope；若缺权限，只发起**一次**授权，scope 一次性包含完成周报所需权限，不要分多轮补权限：
    ```bash
-   lark-cli auth login --scope "base:field:read base:record:read search:message im:message im:message.reactions:read contact:user.basic_profile:readonly search:docs:read docs:document.content:read" --no-wait --json
+   lark-cli auth login --scope "base:field:read base:record:read search:message im:message im:message.reactions:read contact:user.basic_profile:readonly search:docs:read docs:document.content:read calendar:calendar.event:read task:task:read" --no-wait --json
    ```
    拿到 `verification_url` 后必须生成二维码并展示。用户授权完成后再继续。
 2. 周报素材必须尽量收集：
@@ -149,10 +151,12 @@ python scripts/collect.py --mode weekly | python scripts/generate.py --data - --
 | 解析联系人名称 | `contact:user.basic_profile:readonly` |
 | 搜索云空间文档 | `search:docs:read` |
 | 读取文档内容 | `docs:document.content:read` |
+| 读取日历日程 | `calendar:calendar.event:read` |
+| 读取飞书任务 | `task:task:read` |
 
 如遇权限不足，运行：
 ```bash
-lark-cli auth login --scope "base:field:read base:record:read search:message im:message im:message.reactions:read contact:user.basic_profile:readonly search:docs:read docs:document.content:read" --no-wait --json
+lark-cli auth login --scope "base:field:read base:record:read search:message im:message im:message.reactions:read contact:user.basic_profile:readonly search:docs:read docs:document.content:read calendar:calendar.event:read task:task:read" --no-wait --json
 ```
 
 ## 配置选项

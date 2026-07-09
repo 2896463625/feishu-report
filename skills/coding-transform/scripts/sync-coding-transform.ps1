@@ -83,6 +83,16 @@ function Resolve-Setting {
     return $null
 }
 
+function Resolve-LarkCliCommand {
+    $cmd = Get-Command "lark-cli.cmd" -ErrorAction SilentlyContinue
+    if ($null -ne $cmd) { return $cmd.Source }
+
+    $cmd = Get-Command "lark-cli" -ErrorAction SilentlyContinue
+    if ($null -ne $cmd) { return $cmd.Source }
+
+    throw "未找到 lark-cli。请先安装飞书 CLI，并确保 lark-cli 在 PATH 中。"
+}
+
 function Read-State {
     if (-not (Test-Path -LiteralPath $StatePath)) {
         return New-EmptyState
@@ -165,7 +175,7 @@ function Get-CodingWorkbenchIssues {
 function Invoke-FeishuCliJson {
     param([string[]]$Arguments)
 
-    $output = & feishu-cli @Arguments 2>&1
+    $output = & $script:LarkCliCommand @Arguments 2>&1
     if ($LASTEXITCODE -ne 0) {
         throw (($output | Out-String).Trim())
     }
@@ -438,6 +448,7 @@ $script:WaterBiRecordId = Resolve-Setting -Name "waterBiRecordId" -Config $confi
 $script:YuyaoRecordId = Resolve-Setting -Name "yuyaoRecordId" -Config $config -EnvName "CODING_TRANSFORM_YUYAO_RECORD_ID" -Required
 $script:OwnerOpenId = Resolve-Setting -Name "ownerOpenId" -Config $config -EnvName "CODING_TRANSFORM_OWNER_OPEN_ID" -Required
 $script:OwnerDepartment = Resolve-Setting -Name "ownerDepartment" -Config $config -EnvName "CODING_TRANSFORM_OWNER_DEPARTMENT" -Default "后端组"
+$script:LarkCliCommand = Resolve-LarkCliCommand
 
 $summary = [ordered]@{
     mode = $(if ($DryRun) { "dry-run" } elseif ($VerifyOnly) { "verify-only" } else { "write" })

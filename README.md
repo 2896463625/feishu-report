@@ -210,6 +210,20 @@ $cred | Export-Clixml "$env:USERPROFILE\.codex\credentials\coding.credential.xml
 powershell -NoProfile -ExecutionPolicy Bypass -File "skills/coding-transform/scripts/sync-coding-transform.ps1" -DryRun
 ```
 
+### 一键环境检查
+
+仓库提供只读检查脚本，不会写入飞书或 CODING：
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File "scripts/doctor.ps1"
+```
+
+如果希望把 CODING 配置也作为必检项：
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File "scripts/doctor.ps1" -StrictCoding
+```
+
 ## Feishu Report Skill 使用说明
 
 飞书周报 / 日报生成 skill。当前安装名为 `feishu-report`，仓库路径为 `skills/feishu-report`。CODING 数据源由同仓库的 `coding-transform` 提供。
@@ -295,7 +309,7 @@ LARK_REPORT_MODE=daily               # 默认报告模式
 生成周报前先检查 `lark-cli auth status --json --verify`。缺权限时一次性请求：
 
 ```bash
-lark-cli auth login --scope "base:field:read base:record:read search:message im:message im:message.reactions:read contact:user.basic_profile:readonly search:docs:read docs:document.content:read" --no-wait --json
+lark-cli auth login --scope "base:field:read base:record:read search:message im:message im:message.reactions:read contact:user.basic_profile:readonly search:docs:read docs:document.content:read calendar:calendar.event:read task:task:read" --no-wait --json
 ```
 
 | Scope | 用途 |
@@ -308,6 +322,8 @@ lark-cli auth login --scope "base:field:read base:record:read search:message im:
 | `im:message.reactions:read` | 读取消息互动 |
 | `contact:user.basic_profile:readonly` | 解析联系人名称 |
 | `docs:document.content:read` | 读取文档内容 |
+| `calendar:calendar.event:read` | 读取日历日程 |
+| `task:task:read` | 读取飞书任务 |
 
 ## 技术栈
 

@@ -21,7 +21,7 @@
 生成周报前先检查 `lark-cli auth status --json --verify`。缺权限时一次性请求：
 
 ```bash
-lark-cli auth login --scope "base:field:read base:record:read search:message im:message im:message.reactions:read contact:user.basic_profile:readonly search:docs:read docs:document.content:read" --no-wait --json
+lark-cli auth login --scope "base:field:read base:record:read search:message im:message im:message.reactions:read contact:user.basic_profile:readonly search:docs:read docs:document.content:read calendar:calendar.event:read task:task:read" --no-wait --json
 ```
 
 拿到 `verification_url` 后必须生成二维码给用户授权。用户授权完成后，再执行：
